@@ -1,0 +1,29 @@
+test:
+  description: read access request benchmark
+  name: ssidd-contract-benchmark
+  rounds:
+    - label: initDecideWrite
+      rateControl:
+        opts: { tps: 500.0 }
+        type: fixed-rate
+      txNumber: 200
+      workload:
+        arguments: { contractId: ssidd, decisions: 400 }
+        module: workload/decideWrite.js
+    - label: decideWrite
+      rateControl:
+        opts: { tps: 500.0 }
+        type: fixed-rate
+      txNumber: 2000
+      workload:
+        arguments: { contractId: ssidd, decisions: 6000 }
+        module: workload/decideWrite.js
+    - label: finalDecideWrite
+      rateControl:
+        opts: { tps: 500.0 }
+        type: fixed-rate
+      txNumber: 2000
+      workload:
+        arguments: { contractId: ssidd, decisions: 6000 }
+        module: workload/decideWrite.js
+  workers: { number: 10.0, type: local }

@@ -1,0 +1,84 @@
+version: "3"
+services:
+  indy-pool:
+    build:
+      context: .
+      network: host
+      dockerfile: docker/indy-pool.dockerfile
+      args:
+        pool_ip: 10.0.0.10
+    ports:
+      - "9701-9709:9701-9709"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.10
+
+  ta-agent:
+    build:
+      context: .
+      dockerfile: docker/ta-agent-watch.dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://10.0.0.11:7001
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENDPOINT_HOST=${HOST1:-http://10.0.0.11:7001}
+    ports:
+      - "7001:7001"
+    volumes:
+      - .:/app
+    depends_on:
+      - "indy-pool"
+    links:
+      - "indy-pool"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.11
+
+  clinet-agent:
+    build:
+      context: .
+      dockerfile: docker/client-agent-watch.dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://10.0.0.12:7010
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENDPOINT_HOST=${HOST2:-http://10.0.0.12:7010}
+    ports:
+      - "7010:7010"
+    volumes:
+      - .:/app
+    depends_on:
+      - "indy-pool"
+    links:
+      - "indy-pool"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.12
+
+  gk-agent:
+    build:
+      context: .
+      dockerfile: docker/gk-watch.dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://10.0.0.13:7020
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENDPOINT_HOST=${HOST3:-http://10.0.0.13:7020}
+    ports:
+      - "7020:7020"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - .:/app
+    depends_on:
+      - "indy-pool"
+    links:
+      - "indy-pool"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.13
+
+networks:
+  agent_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
+          gateway: 10.0.0.1

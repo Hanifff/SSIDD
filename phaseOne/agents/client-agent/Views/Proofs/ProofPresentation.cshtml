@@ -1,0 +1,24 @@
+@model ProofPresentationModel
+
+<div class="card-deck">
+    <div class="card shadow-sm mt-3">
+        <div class="card-body">
+            <div class="card-title">Proof Presentation</div>
+            <div>
+                <form novalidate autocomplete="off" method="POST" asp-controller="Proofs" asp-action="SendProof">
+                    <div class="form-group">
+                        <label for="ConnectionId">Connection ID</label>
+                        <input class="form-control" id="ConnectionId" name="ConnectionId" value="@Model.ConnectionId" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ProofId">Proof ID</label>
+                        <input class="form-control" id="ProofId" name="ProofId" value="@Model.ProofId" />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

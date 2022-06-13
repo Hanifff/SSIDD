@@ -1,0 +1,15 @@
+@model AccessRequestModel
+
+<div class="card-deck">
+    <div class="card text-center mt-2 w-50">
+        <div class="card-header">
+            Access request is sent to GateKepper!
+        </div>
+        <div class="card-body">
+            <h5 class="card-title mt-2">ResourceId: @Model.ResourceId</h5>
+            <h5 class="card-title mt-2">Type of request: @Model.Type</h5>
+            <h5 class="card-title mt-2">Status: @Model.Status</h5>
+            <p class="card-title mt-2">Data: @Model.Data</p>
+        </div>
+    </div>
+</div>

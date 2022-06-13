@@ -1,0 +1,75 @@
+version: '3'
+services:
+  indy-pool:
+    build:
+      context: .
+      network: host
+      dockerfile: docker/indy-pool.dockerfile
+      args:
+        pool_ip: 10.0.0.10
+    ports:
+      - "9701-9709:9701-9709"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.10
+
+  ta-agent:
+    build:
+      context: .
+      dockerfile: docker/ta-agent.dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://10.0.0.11:7000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENDPOINT_HOST=${HOST1:-http://10.0.0.11:7000}
+    ports:
+      - "7000:7000"
+    depends_on:
+      - "indy-pool"
+    links:
+      - "indy-pool"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.11
+
+  client-agent:
+    build:
+      context: .
+      dockerfile: docker/client-agent.dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://10.0.0.12:7100
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENDPOINT_HOST=${HOST2:-http://10.0.0.12:7100}
+    ports:
+      - "7100:7100"
+    depends_on:
+      - "indy-pool"
+    links:
+      - "indy-pool"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.12
+
+  pep-agent:
+    build:
+      context: .
+      dockerfile: docker/pep.dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://10.0.0.13:7200
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENDPOINT_HOST=${HOST3:-http://10.0.0.13:7200}
+    ports:
+      - "7200:7200"
+    depends_on:
+      - "indy-pool"
+    links:
+      - "indy-pool"
+    networks:
+      agent_net:
+        ipv4_address: 10.0.0.13
+
+networks:
+  agent_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16

@@ -1,0 +1,69 @@
+services:
+
+  ipfs0:
+    container_name: ipfs0
+    image: ipfs/go-ipfs:release
+    ports:
+      - "4001:4001" #  swarm 
+      - "5001:5001" #  api
+      - "8080:8080" #  gateway
+    volumes:
+      - ./data/ipfs0:/data/ipfs
+
+  cluster0:
+    container_name: cluster0
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs0
+    environment:
+      CLUSTER_PEERNAME: cluster0
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
+      CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
+      CLUSTER_MONITORPINGINTERVAL: 2s # discovery speed
+    ports:
+      - "9099:9094"
+      # - "9096:9096" # Proxy endpoint
+    volumes:
+      - ./data/cluster0:/data/ipfs-cluster
+
+  ipfs1:
+    container_name: ipfs1
+    image: ipfs/go-ipfs:release
+    volumes:
+      - ./data/ipfs1:/data/ipfs
+
+  cluster1:
+    container_name: cluster1
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs1
+    environment:
+      CLUSTER_PEERNAME: cluster1
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs1/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*'
+      CLUSTER_MONITORPINGINTERVAL: 2s
+    volumes:
+      - ./data/cluster1:/data/ipfs-cluster
+
+  ipfs2:
+    container_name: ipfs2
+    image: ipfs/go-ipfs:release
+    volumes:
+      - ./data/ipfs2:/data/ipfs
+
+  cluster2:
+    container_name: cluster2
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs2
+    environment:
+      CLUSTER_PEERNAME: cluster2
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs2/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*'
+      CLUSTER_MONITORPINGINTERVAL: 2s
+    volumes:
+      - ./data/cluster2:/data/ipfs-cluster

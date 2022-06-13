@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package ssidd;
+
+option go_package = "/protos";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+
+// Geneate protobuff from protos dir
+// protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:.  ssidd.proto
+// python3 -m grpc_tools.protoc -I. --python_out=../benchmark/ --grpc_python_out=../benchmark/ ssidd.proto
+
+service Ssidd {
+    // Data and Policy level (Policy can be splitted from data FTF).
+    rpc Read(ReadRequest) returns(ReadResponse) {};
+    rpc Write(WriteRequest)returns(WriteResponse) {};
+    rpc Delete(DeleteRequest) returns(DeleteResponse) {};
+    rpc Update(UpdateRequest) returns(UpdateResponse) {};
+    
+    // organisation level
+    rpc AddOrganisation(OrgAddRequest) returns(OrgAddResponse) {};
+    rpc RemoveOrganisation(OrgRemoveRequest) returns(OrgRemoveResponse) {};
+    /* rpc EnrollClient(EnrollRequest)returns(EnrollResponse) {}*/
+}
+
+
+// Reuest messages
+
+message ReadRequest {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    map<string, google.protobuf.Value> ClientAttributes = 3;
+    google.protobuf.Timestamp Timestamp = 4;
+    bool IsPolicy = 5; // if this a fetch policy request
+}
+
+message WriteRequest {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    string PolicyID = 3;
+    string OwnerOrgID=4;
+    map<string, google.protobuf.Value> ClientAttributes = 5;
+    bytes Data = 6;
+    map<string, google.protobuf.Value> OptionalResAttributes = 7;
+    google.protobuf.Timestamp Timestamp = 8;
+    bool IsPolicy = 9; // if this a write policy request
+    map<string, google.protobuf.Value> Policy = 10; 
+}
+
+message DeleteRequest {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    map<string, google.protobuf.Value> ClientAttributes = 3;
+    google.protobuf.Timestamp Timestamp = 4;
+    bool IsPolicy = 5; // if this a delete policy request
+}
+
+message UpdateRequest {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    map<string, google.protobuf.Value> ClientAttributes = 3;
+    bytes Data = 4;
+    map<string, google.protobuf.Value> ResourceAttributes = 5;
+    google.protobuf.Timestamp Timestamp = 6;
+    bool IsPolicy = 7; // if this a update policy request
+    map<string, google.protobuf.Value> Policy = 8; 
+}
+
+message OrgAddRequest {
+    string ClientDID = 1;   
+    map<string, google.protobuf.Value> ClientAttributes = 2;
+    map<string, google.protobuf.Value> OrganisationPolicy = 3; 
+    string ChannelName = 4;
+    google.protobuf.Timestamp Timestamp = 5;
+    // TODO: Come back here for other necessary fileds 
+}
+
+message OrgRemoveRequest {
+    string ClientDID = 1;   
+    map<string, google.protobuf.Value> ClientAttributes = 2;
+    google.protobuf.Timestamp Timestamp = 3;
+    //optional string ChannelName = 4;
+    // TODO: Come back here for other necessary fileds 
+}
+
+/* 
+message EnrollRequest{
+    string DID = 1;
+    string Type = 2;
+} 
+*/
+// Response messages
+
+message ReadResponse {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    bool Accept = 3;
+    bytes Data = 4;
+    string Message = 5;
+    bool IsPolicy = 6; // if this is a fetch policy request
+    map<string, string> Policy = 7; 
+}
+
+message WriteResponse {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    bool Accept = 3;
+    string Message = 4;
+}
+
+message DeleteResponse {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    bool Accept = 3;
+    string Message = 4;
+}
+
+message UpdateResponse {
+    string ClientDID = 1;
+    string ResourceID = 2;
+    bool Accept = 3;
+    string Message = 4;
+}
+
+message OrgAddResponse {
+    string ClientDID = 1;  
+    bool Accept = 2;
+    string Message = 3; 
+    // TODO: Come back here for other necessary fileds 
+}
+
+message OrgRemoveResponse {
+    string ClientDID = 1;  
+    bool Accept = 2;
+    string Message = 3;
+    // TODO: Come back here for other necessary fileds 
+}
+/* 
+message EnrollResponse{
+    bool Enrolled = 1;
+} 
+*/

@@ -1,0 +1,77 @@
+﻿@model ProvisioningRecord
+
+@{
+    ViewData["Title"] = "Home";
+}
+<div class="card-group">
+    <div class="card text-center mt-2 w-50">
+        <div class="card-header">
+            Gatekeeper agent
+        </div>
+        <div class="card-body">
+            <img style="width: 100px; height: 100px" src="@Url.Identicon(Model.Owner.Name, size: 200)"
+                alt="@Model.Owner.Name">
+            @* <h5 class="card-title mt-2">@Model.Owner.Name</h5> *@
+            <h5 class="card-title mt-2">PEP</h5>
+            <small class="text-muted">@Model.Endpoint.Uri</small>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="DID">@Model.Endpoint.Did</li>
+            <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="VERKEY">
+                @Model.Endpoint.Verkey.First()</li>
+        </ul>
+    </div>
+    <div class="card text-center mt-2 w-50">
+        <div class="card-header">
+            List of available resources
+        </div>
+        <div class="card-body">
+            @* TODO: add table and fyll with data from sql databse off-chain*@
+            <div class="container">
+                <h1>Data sources</h1>
+                <!-- Div using .table-responsive class-->
+                <div class="table-responsive">
+                    <!--Bootstrap Table using .table class-->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Res.ID</th>
+                                <th>Owner</th>
+                                <th>Size</th>
+                                <th>City</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>r001</td>
+                                <td>Organsiation X01</td>
+                                <td>50GB</td>
+                                <td>Spain</td>
+                            </tr>
+                            <tr>
+                                <td>r002</td>
+                                <td>Organsiation X</td>
+                                <td>40GB</td>
+                                <td>Germany</td>
+                            </tr>
+                            <tr>
+                                <td>r001</td>
+                                <td>Organsiation X02</td>
+                                <td>50GB</td>
+                                <td>Spain</td>
+                            <tr>
+                                <td>r001</td>
+                                <td>Organsiation X03</td>
+                                <td>100GB</td>
+                                <td>Norway</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @* <script src="js/jquery-2.1.4.min.js"></script>
+                <script src="js/bootstrap.min.js"></script> *@
+
+        </div>
+    </div>
+</div>

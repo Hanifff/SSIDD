@@ -1,0 +1,79 @@
+@using System.Linq
+@using Hyperledger.Aries.Features.Handshakes.Common
+@model AccessFormModel
+<div class="card-group">
+    <div class="card text-center mt-2 w-50">
+        <div class="card-header">
+            Access request
+        </div>
+        <div class="card-body">
+            <h5 class="card-title mt-2">Create an access request</h5>
+        </div>
+        <div class="card-body">
+            <form novalidate autocomplete="off" method="POST" asp-controller="Access" asp-action="SubmitRequest">
+                @* <div class="form-group">
+                    <label for="ClientDID">DID</label>
+                    <input class="form-control" id="ClientDID" name="ClientDID" value="@Model.Connections[1].MyDid" />
+                    </div> *@
+                <div>
+                    <select class="custom-select custom-select-lg mb-3" name="ClientDID">
+                        <option selected disabled value="">DID</option>
+                        @foreach (var Connection in Model.Connections)
+                        {
+                            if (Connection.State == ConnectionState.Connected)
+                            {
+                                <option value="@Connection.MyDid">@Connection.MyDid - @Connection.Alias.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ResourceId">Resource ID</label>
+                    <input class="form-control" id="ResourceId" name="ResourceId" value="" />
+                </div>
+                <div>
+                    <select class="custom-select custom-select-lg mb-3" name="ConnectionId">
+                        <option selected disabled value="">Select a Connection</option>
+                        @foreach (var Connection in Model.Connections)
+                        {
+                            if (Connection.State == ConnectionState.Connected)
+                            {
+                                <option value="@Connection.Id">@Connection.Alias.Name - @Connection.Id</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="custom-select custom-select-lg mb-3" name="Type" required>
+                        <option selected disabled value="">Type of Request</option>
+                        <option value="write">Write</option>
+                        <option value="read">Read</option>
+                        <option value="delete">Delete*</option>
+                        <option value="update">Update*</option>
+                        <option value="org-policy">Org-Policy*</option>
+                        <option value="data-policy">data-Policy*</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Data">Data</label>
+                    <textarea class="form-control" id="Data" name="Data" cols="30"
+                        rows="10">Type in data to share  (must change to submit a file)..</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="Policy">Data</label>
+                    <textarea class="form-control" id="Policy" name="Policy" cols="30"
+                        rows="10">Type in associated policy in json format (must change to submit a file)..</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="Resouce-attributes">Data</label>
+                    <textarea class="form-control" id="Resouce-attributes" name="Resouce-attributes" cols="30"
+                        rows="10">Type in associated resouce attributes in json format (must change to submit a file)..</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    Request
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>

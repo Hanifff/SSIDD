@@ -1,0 +1,41 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out01~
+*~
+*#
+.#*
+# Hyperledger
+.*.sw*
+# installed platform-specific binaries
+/bin
+/config
+.DS_Store
+.project
+# omit Go vendor directories
+.vscode
+.gradle
+.idea
+# Dependency directories
+node_modules/
+# Ignore Gradle build output directory
+build
+package-lock.json
+external-chaincode/
+
+# Eclipse
+.classpath
+.settings
+
+#node
+node_modules
+
+/vendor
+
+
+# caliper
+caliper.log

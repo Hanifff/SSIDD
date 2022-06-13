@@ -1,0 +1,19 @@
+{
+  "name": "caliper-workspace",
+  "version": "1.0.0",
+  "description": "You can also use our benchmarking module to benchamrk our chaincode.<br> In the benchmarking set we use different data set to store on the chain, and evaluate the performance based on that. The size of data set varies as follow:<br>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hyperledger/caliper-cli": "^0.4.2",
+    "dotenv": "^16.0.1",
+    "fabric-ca-client": "^2.2.3",
+    "fabric-network": "^2.2.3",
+    "node-async-locks": "^2.1.2"
+  }
+}

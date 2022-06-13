@@ -1,0 +1,22 @@
+@model RequestorsModel
+
+<div class="card-deck">
+    @foreach (var ac in Model.accessRequests)
+    {
+        <div class="card shadow-sm mt-3">
+            <div class="card-body">
+                <div class="card-title">Access request:&nbsp;</div>
+                <div class="card-text">
+                    <div>
+                        <small class="text-muted">Client ID:&nbsp;</small>
+                        <p>@ac.ClientDid</p>
+                    </div>
+                    <div>
+                        <small class="text-muted">Client ID:&nbsp;</small>
+                        <p>@ac.Status</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

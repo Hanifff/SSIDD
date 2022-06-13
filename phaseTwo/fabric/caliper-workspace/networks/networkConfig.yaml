@@ -1,0 +1,15 @@
+caliper: {blockchain: fabric}
+channels:
+- channelName: mychannel
+  contracts:
+  - {id: ssidd}
+name: Caliper test
+organizations:
+- connectionProfile: {discover: true, path: ../test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml}
+  identities:
+    certificates:
+    - clientPrivateKey: {path: ../test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/25aebe6990f10c6a228e45a9496e299f3e740411111b3eb67aaf07995d40af8f_sk}
+      clientSignedCert: {path: ../test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem}
+      name: User1
+  mspid: Org1MSP
+version: 2.0.0
